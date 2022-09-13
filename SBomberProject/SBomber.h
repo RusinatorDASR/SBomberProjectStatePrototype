@@ -25,6 +25,8 @@ public:
     void MoveObjects();
     void CheckObjects();
 
+	void CloneDestroyableGroundObject();
+
 private:
 
     void CheckPlaneAndLevelGUI();

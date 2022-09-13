@@ -1,6 +1,10 @@
 
 #include <conio.h>
 #include <windows.h>
+#include <ctime>
+#include <iostream>
+#include <map>
+#include <algorithm>
 
 #include "MyTools.h"
 #include "SBomber.h"
@@ -299,9 +303,42 @@ void SBomber::ProcessKBHit()
         DropBomb();
         break;
 
+	case 'D':
+		CloneDestroyableGroundObject();
+		break;
+
+	case 'd':
+		CloneDestroyableGroundObject();
+		break;
+
     default:
         break;
     }
+}
+
+void SBomber::CloneDestroyableGroundObject() {
+	vector<DestroyableGroundObject*> vec = FindDestoyableGroundObjects();
+	srand(time(NULL));
+	int iObj = rand() % vec.size();
+	DestroyableGroundObject* pObj = vec[iObj]->Clone();
+	bool flag = false;
+	for (size_t x = 5; x < 105; x++) {
+		for (size_t i = 0; i < vec.size(); i++) {
+			if (vec[i]->isInside(x, x + pObj->GetWidth())) {
+				flag = true;
+				break;
+			}
+		}
+		if (!flag) {
+			pObj->SetPos(x, pObj->GetY());
+			vecStaticObj.push_back(pObj);
+			return;
+		}
+		else {
+			flag = false;
+		}
+	}
+	delete pObj;
 }
 
 void SBomber::DrawFrame()
